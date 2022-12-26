@@ -8,5 +8,5 @@
     <text>纬度：{{latitude}}</text>
     <text>经度：{{longitude}}</text>
   <button type="primary" bindtap="postImage">提取文字</button>
-  <text>{{ocr}}</text>
+  <text>识别结果：{{ocr}}</text>
 </view>
