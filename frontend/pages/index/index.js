@@ -1,5 +1,7 @@
 // index.js
 // 获取应用实例
+import '../../serverURL'
+import { serverURL } from '../../serverURL'
 const app = getApp()
 
 Page({
@@ -9,14 +11,14 @@ Page({
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
     canIUseGetUserProfile: false,
-    canIUseOpenData: wx.canIUse('open-data.type.userAvatarUrl') && wx.canIUse('open-data.type.userNickName') // 如需尝试获取用户信息可改为false
+    canIUseOpenData: wx.canIUse('open-data.type.userAvatarUrl') && wx.canIUse('open-data.type.userNickName'), // 如需尝试获取用户信息可改为false
+    src: null,
+    date: null,
+    latitude: null,
+    longitude:null,
+    ocr: null,
   },
-  // 事件处理函数
-  bindViewTap() {
-    wx.navigateTo({
-      url: '../logs/logs'
-    })
-  },
+
   onLoad() {
     if (wx.getUserProfile) {
       this.setData({
@@ -24,6 +26,7 @@ Page({
       })
     }
   },
+
   getUserProfile(e) {
     // 推荐使用wx.getUserProfile获取用户信息，开发者每次通过该接口获取用户个人信息均需用户确认，开发者妥善保管用户快速填写的头像昵称，避免重复弹窗
     wx.getUserProfile({
@@ -44,5 +47,39 @@ Page({
       userInfo: e.detail.userInfo,
       hasUserInfo: true
     })
-  }
+  },
+  takePhoto: function() {
+    this.setData({
+      date: (new Date()).toISOString(),
+    })
+    let ctx = wx.createCameraContext();
+    wx.getLocation().then((res) => {
+      this.setData({
+        latitude: res.latitude,
+        longitude: res.longitude,
+      })
+    });
+    ctx.takePhoto({
+      quality: 'high',
+      success: (res) => {
+        this.setData({
+          src: res.tempImagePath,
+        });
+      }
+    });
+  },
+
+  postImage: function() {
+    console.log(this.data.src)
+    wx.uploadFile({
+      url: serverURL,
+      filePath: this.data.src,
+      name: "img",
+      success: (res) => {
+        this.setData({
+          ocr: res.data
+        })
+      }
+    });
+  },
 })

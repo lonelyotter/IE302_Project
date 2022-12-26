@@ -10,5 +10,6 @@
     "navigationBarTextStyle":"black"
   },
   "style": "v2",
-  "sitemapLocation": "sitemap.json"
+  "sitemapLocation": "sitemap.json",
+  "permission": {"scope.userLocation": {"desc": "获取图片位置"}}
 }
