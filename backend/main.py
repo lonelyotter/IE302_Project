@@ -9,12 +9,17 @@ from urllib.parse import urlencode
 from urllib.parse import quote_plus
 import ssl
 from key import API_KEY, SECRET_KEY
+from pymongo import MongoClient
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
 OCR_URL = "https://aip.baidubce.com/rest/2.0/ocr/v1/accurate_basic"
 
 TOKEN_URL = 'https://aip.baidubce.com/oauth/2.0/token'
+
+client = MongoClient()
+db = client.images
+collection = db.imgs
 
 
 def fetch_token():
@@ -90,6 +95,8 @@ async def image(img: UploadFile = File(...)):
     print(filename)
     try:
         content = await img.read()
+        document = {"filename": filename, "content": content}
+        document_id = collection.insert_one(document).inserted_id
         token = fetch_token()
         image_url = OCR_URL + "?access_token=" + token
         text = ""
