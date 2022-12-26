@@ -1,6 +1,5 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
-import sys
 import json
 import base64
 from urllib.request import urlopen
@@ -88,24 +87,23 @@ async def index():
 @app.post('/image')
 async def image(img: UploadFile = File(...)):
     filename = img.filename
+    print(filename)
     try:
         content = await img.read()
         token = fetch_token()
         image_url = OCR_URL + "?access_token=" + token
-        print(image_url)
         text = ""
         result = request(image_url,
                          urlencode({'image': base64.b64encode(content)}))
         result = json.loads(result)
         for words in result['words_result']:
-            text = text + words['words'] + '\n'
+            text = text + words['words'] + ' '
         return text
 
     except Exception as e:
-        print(e)
         return "error"
 
 
 if __name__ == '__main__':
     import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8000)
