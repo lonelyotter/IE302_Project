@@ -6,7 +6,7 @@ frontend: Weixin mini program
 
 backend: Python fastapi, Baidu OCR
 
-## build
+## setup
 
 ### frontend
 
@@ -18,7 +18,7 @@ backend: Python fastapi, Baidu OCR
    export const serverURL = "http://<your backend server>:8000/image"
    ```
 
-3. Build the program.
+3. Build and run.
 
 ### backend
 
