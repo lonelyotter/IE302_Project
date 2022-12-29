@@ -1,5 +1,11 @@
 # IE302_Project
 
+A simple image OCR application.
+
+frontend: Weixin mini program
+
+backend: Python fastapi, Baidu OCR
+
 ## build
 
 ### frontend
